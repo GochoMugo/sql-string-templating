@@ -8,6 +8,7 @@ class sqlstrException(Exception):
     def __init__(self, message):
         '''
         Instanitates a custom sqlstrException
-        :message str:
+
+        message -- string. Message describing the exception.
         '''
         Exception.__init__(self, message)

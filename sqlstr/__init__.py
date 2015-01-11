@@ -14,6 +14,7 @@ __version__ = "0.0.0"
 
 from .common import Base
 from .MySQL import MySQL
+from .SQLite3 import SQLite3
 
 
-__all__ = ["__version__", "Base", "MySQL",]
+__all__ = ["__version__", "Base", "MySQL", "SQLite3",]

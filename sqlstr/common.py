@@ -37,9 +37,10 @@ to **MySQL** since this library is MySQL-first.
 
 from copy import deepcopy
 from string import Template
+from .exception import sqlstrException
 
 
-common = {
+common_pack = {
   "create_table": Template("CREATE TABLE $table_name ($columns);"),
   "show_tables": Template("SHOW tables;"),
   "truncate_table": Template("TRUNCATE TABLE $table_name;"),
@@ -54,20 +55,24 @@ common = {
 
 
 class Base:
-    def __init__(self, lang_dict=common):
-        self.__lang_dict = deepcopy(lang_dict)
-        self.__context = {}
+    # class variables
+    lang_pack = common_pack
+    context = {}
 
-    def define(self, dict_key, query):
-        self.__lang_dict[dict_key] = Template(query)
+    @classmethod
+    def update(cls, update_pack):
+        '''Update class lang_pack with template strings from update_pack'''
+        for key in update_pack:
+            cls.lang_pack[key] = Template(update_pack[key])
 
-    def build(self, dict_key, **context):
+    @classmethod
+    def build(cls, dict_key, **context):
         if context:
-            self.__context = context
+            cls.__context = context
         try:
-            query = self.__lang_dict.get(dict_key)
-            return query.substitute(self.__context)
+            query = cls.__lang_pack.get(dict_key)
+            return query.substitute(cls.__context)
         except ValueError:
-            raise Exception("Missing template")
+            raise sqlstrException("Missing template")
         except KeyError:
-            raise Exception("Missing parameter")
+            raise sqlstrException("Missing parameter")

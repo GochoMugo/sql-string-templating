@@ -9,8 +9,9 @@ sub-classing the default/common language class.
 '''
 
 
-from .common import Base
+from .Base import Base, language
 
 
+@language
 class MySQL(Base):
     pass

@@ -55,15 +55,17 @@ common_pack = {
 
 
 class Base:
-    # class variables
+    '''Base class for all SQL variants'''
+
     lang_pack = common_pack
     context = {}
 
     @classmethod
-    def update(cls, update_pack):
-        '''Update class lang_pack with template strings from update_pack'''
-        for key in update_pack:
-            cls.lang_pack[key] = Template(update_pack[key])
+    def get_string(cls, key):
+        '''Return a string representation of the template string with {key}
+        as its identifier
+        '''
+        return cls.lang_pack[key].safe_substitute()
 
     @classmethod
     def build(cls, dict_key, **context):
@@ -76,3 +78,22 @@ class Base:
             raise sqlstrException("Missing template")
         except KeyError:
             raise sqlstrException("Missing parameter")
+
+
+def language(cls):
+    '''Return the class with its own class variables i.e. variables will not be
+    accessed from the base class.
+    '''
+    cls.lang_pack = deepcopy(common_pack)
+    return cls
+
+
+def update_pack(pack):
+    '''Return decorator allowing update of class lang_pack with template
+    strings from {pack}'''
+    def update_class(cls):
+        '''Update class {cls} language pack'''
+        for key in pack:
+            cls.lang_pack[key] = Template(pack[key])
+        return cls
+    return update_class

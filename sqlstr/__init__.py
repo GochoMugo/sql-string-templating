@@ -12,7 +12,7 @@ Some research/must-read: https://www.udemy.com/blog/sql-queries/
 __version__ = "0.0.0"
 
 
-from .common import Base
+from .Base import Base
 from .MySQL import MySQL
 from .SQLite3 import SQLite3
 

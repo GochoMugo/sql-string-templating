@@ -58,7 +58,10 @@ class Base:
     '''Base class for all SQL variants'''
 
     lang_pack = common_pack
-    context = {}
+
+    def __init__(self):
+        '''Instantiate a language templater'''
+        self.__context = {}
 
     @classmethod
     def get_string(cls, key):
@@ -67,13 +70,16 @@ class Base:
         '''
         return cls.lang_pack[key].safe_substitute()
 
-    @classmethod
-    def build(cls, dict_key, **context):
+    def build(self, dict_key, **context):
+        '''Build a valid SQL strings using values from {context}
+
+        context -- (dict) mapping of template params to desired values
+        '''
         if context:
-            cls.__context = context
+            self.__context = context
         try:
-            query = cls.__lang_pack.get(dict_key)
-            return query.substitute(cls.__context)
+            query = lang_pack.get(dict_key)
+            return query.substitute(self.__context)
         except ValueError:
             raise sqlstrException("Missing template")
         except KeyError:

@@ -6,7 +6,7 @@ Strings generated from this module are specific to SQLite3.
 '''
 
 
-from .Base import Base,  language, update_pack
+from .Base import Base, language, update_pack
 
 
 SQLite3_pack = {

@@ -73,17 +73,19 @@ class Base:
     def build(self, dict_key, **context):
         '''Build a valid SQL strings using values from {context}
 
-        context -- (dict) mapping of template params to desired values
+        context -- (keyword args) mapping of template params to desired values
         '''
+        query = None
         if context:
             self.__context = context
         try:
-            query = lang_pack.get(dict_key)
+            query = self.lang_pack[dict_key]
             return query.substitute(self.__context)
-        except ValueError:
-            raise sqlstrException("Missing template")
-        except KeyError:
-            raise sqlstrException("Missing parameter")
+        except KeyError as err:
+            if query is None:
+              raise sqlstrException("Missing template -- {}".format(err))
+            else:
+              raise sqlstrException("Missing parameter -- {}".format(err))
 
 
 def language(cls):

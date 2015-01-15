@@ -85,7 +85,7 @@ class Base:
             if query is None:
               raise sqlstrException("Missing template -- {}".format(err))
             else:
-              raise sqlstrException("Missing parameter -- {}".format(err))
+              raise sqlstrException("Missing argument -- {}".format(err))
 
 
 def language(cls):
